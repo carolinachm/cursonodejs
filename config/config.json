@@ -1,0 +1,29 @@
+{
+  "development": {
+    "username": "root",
+    "password": "root",
+    "database": "nodeapi",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "apiPort": 3000,
+    "secret": "nodeapi"
+  },
+  "test": {
+    "username": "root",
+    "password": "root",
+    "database": "nodeapi",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "apiPort": 3000,
+    "secret": "nodeapi"
+  },
+  "production": {
+    "username": "root",
+    "password": "root",
+    "database": "nodeapi",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "apiPort": 3000,
+    "secret": "nodeapi"
+  }
+}
