@@ -1,43 +1,55 @@
 'use strict'// ele força o js ser mais criterioso
+
 const ValidationContract = require('../validators/fluent-validator');
 const repository = require('../repositories/productRepository');
-exports.get = (req, res, next) => {
-   repository.get()
-        .then(data => {
-            res.status(200).send(data);
-        }).catch(error => {
-            res.status(400).send(error);
+
+exports.get = async(req, res, next) => {
+    try {
+        var data = awaitrepository.get();
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(500).send({
+            message: 'Falha ao processar a requisição'
         });
+
+    }
+
 }
-exports.getBySlug = (req, res, next) => {
-   repository.getBySlug(req.param.slug)
-        .then(data => {
-            res.status(200).send(data);
-        }).catch(error => {
-            res.status(400).send(error);
+exports.getBySlug = async(req, res, next) => {
+    try {
+        var data = await repository.getBySlug(req.param.slug);
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição'
         });
+
+    }
+
 }
-exports.getById = (req, res, next) => {
-  repository.getById(req.param.id)
-        .then(data => {
-            res.status(200).send(data);
-        }).catch(error => {
-            res.status(400).send(error);
+exports.getById = async(req, res, next) => {
+    try {
+        var data = await repository.getById(req.params.id);
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição'
         });
+    }
+
 }
-exports.getByTags = (req, res, next) => {
-    Product
-        .find({
-            tags: req.param.tags,
-            active: true
-        }, 'title description price slug tags')
-        .then(data => {
-            res.status(200).send(data);
-        }).catch(error => {
-            res.status(400).send(error);
+exports.getByTags = async(req, res, next) => {
+    try {
+        var data = await repository.getByTags(req.params.tags);
+        res.status(200).send(data);
+    } catch (error) {
+        res.status(500).send({
+            message: 'Falha ao processar sua requisição'
         });
+    }
+
 }
-exports.post = (req, res, next) => {
+exports.post = async(req, res, next) => {
 
     let contract = new ValidationContract();
 
@@ -50,52 +62,46 @@ exports.post = (req, res, next) => {
         res.status(400).send(contract.errors()).end();
         return;
     }
-    Product
-        .save()
-        .then(result => {
-            res.status(201).send({
-                message: 'Produto cadastrado com sucesso!'
-            });
-        }).catch(error => {
-            res.status(400).send({
-                message: 'Falha ao cadastrar o produto!',
-                data: error
-            });
+
+    try {
+        await repository.create(req.body);
+        res.status(201).send({
+            message: 'Produto cadastrado com sucesso!'
         });
+    } catch (error) {
+        res.status(500).send({
+            message: 'Falha ao cadastrar o produto!'
+        });
+    }
+
 };
 
-exports.put = (req, res, next) => {
-    Product
-        .findByIdAndUpdate(req.param.id, {
-            $set: {
-                title: req.body.title,
-                description: req.body.description,
-                price: req.body.price,
-                slug: req.body.slug
-            }
-        }).then(result => {
-            res.status(200).send({
-                message: 'Produto atualizado com sucesso!'
-            });
-        }).catch(error => {
-            res.status(400).send({
-                message: 'Falha ao atualizar o produto!',
-                data: error
-            });
+exports.put = async(req, res, next) => {
+    try {
+        await repository.update(req.params.id, req.body);
+        res.status(200).send({
+            message: 'Produto atualizado com sucesso!'
         });
+    } catch (error) {
+        res.status(400).send({
+            message: 'Falha ao atualizar o produto!',
+
+        });
+    }
+
 };
 
-exports.delete = (req, res, next) => {
-    Product
-        .findByIdAndRemove(req.param.id)
-        .then(result => {
-            res.status(200).send({
-                message: 'Produto excluido com sucesso!'
-            });
-        }).catch(error => {
-            res.status(400).send({
-                message: 'Falha ao excluir o produto!',
-                data: error
-            });
+exports.delete = async(req, res, next) => {
+    try {
+        await repository.delete(req.body.id);
+        res.status(200).send({
+            message: 'Produto excluido com sucesso!'
         });
+    } catch (error) {
+        res.status(400).send({
+            message: 'Falha ao excluir o produto!',
+
+        });
+    }
+
 };

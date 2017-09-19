@@ -1,55 +1,58 @@
 'use strict';
 const Product = app.locals.db.product;
 
-exports.get = () => {
-    return Product
-    .find({
-        active:true
-    }, 'title price slug')
+exports.get = async () => {
+    const res = await Product
+        .find({
+            active: true
+        }, 'title price slug');
+    return res;
 }
 
-exports.getBySlug = (slug) => {
-    return Product
+exports.getBySlug = async (slug) => {
+    const res = await Product
         .findOne({
             slug: req.param.slug,
-            active: true
-        }, 'title description price slug tags')
-}
-
-exports.getById = async(id) => {
-      return Product
-        .findById({
-            id: req.param.id,
-        })
-}
-
-exports.getByTag = async(tag) => {
-    const res = Product
-        .find({
-            tags: tag,
             active: true
         }, 'title description price slug tags');
     return res;
 }
 
-exports.create = async(data) => {
+exports.getById = async (id) => {
+    const res = await Product
+        .findById({
+            id: req.param.id,
+        });
+    return res;
+}
+
+exports.getByTag = async (tag) => {
+    const res = await Product
+        .find({
+            tags: tags,
+            active: true
+        }, 'title description price slug tags');
+    return res;
+}
+
+exports.create = async (data) => {
     var product = new Product(data);
     await product.save();
 }
-
-exports.update = async(id, data) => {
+exports.update = async (id, data) => {
     await Product
-        .findByIdAndUpdate(id, {
+        .findByIdAndUpdate(req.param.id, {
             $set: {
-                title: data.title,
-                description: data.description,
-                price: data.price,
-                slug: data.slug
+                title: req.body.title,
+                description: req.body.description,
+                price: req.body.price,
+                slug: req.body.slug
             }
         });
 }
 
-exports.delete = async(id) => {
+
+exports.delete = async (id) => {
     await Product
-        .findOneAndRemove(id);
+        .findByIdAndRemove(id);
 }

@@ -11,7 +11,7 @@
   "test": {
     "username": "root",
     "password": "root",
-    "database": "nodeapi",
+    "database": "database_test",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "apiPort": 3000,
@@ -19,11 +19,12 @@
   },
   "production": {
     "username": "root",
-    "password": "root",
-    "database": "nodeapi",
+    "password": null,
+    "database": "database_production",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "apiPort": 3000,
     "secret": "nodeapi"
+    
   }
 }
